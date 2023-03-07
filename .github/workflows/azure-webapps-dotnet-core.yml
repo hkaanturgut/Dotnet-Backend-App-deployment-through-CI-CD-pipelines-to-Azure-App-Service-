@@ -35,9 +35,18 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+        
+      - name: dotnet test
+        run: dotnet test -c Release --logger trx --results-directory ${{env.DOTNET_ROOT}}/results
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload test results artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: .results
+          path: ${{env.DOTNET_ROOT}}/results
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
